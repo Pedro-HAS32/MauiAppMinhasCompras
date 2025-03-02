@@ -14,8 +14,11 @@ Esse projeto foi desenvolvido durante a Agenda 01 e 02 da matéria de Tecnologia
 ---
 
 # Estrutura das pastas
+
 **Helpers** - Armazena as classes que representam os dados e as regras de negócio do aplicativo
+
 **Models** - Descrevem a estrutura de dados, incluindo propriedades e atributos, e são usados para interagir com o banco de dados e serviços externos.
+
 **Views** - Contém páginas ou interfaces de usuário, geralmente implementados no XAML no .NET MAUI.
 
 ---
