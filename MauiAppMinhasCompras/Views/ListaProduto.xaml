@@ -6,7 +6,7 @@
 
  
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Somar" />
+        <ToolbarItem Text="Somar" Clicked="ToolbarItem_Clicked_1" />
         
        
         <ToolbarItem Text="Adicionar Produto" Clicked="ToolbarItem_Clicked" />
@@ -17,6 +17,53 @@
             Text="Lista Produtos"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+
+        <VerticalStackLayout
+            HorizontalOptions="FillAndExpand">
+            
+            <!--Barra de pesquisa-->
+            <SearchBar x:Name="txt_search"
+                       Placeholder="Buscar por Produtos"
+                       TextChanged="txt_search_TextChanged" />
+            
+            <!--Lista de produtos na barra de pesquisa-->
+            <ListView x:Name="lst_produtos">
+                <ListView.Header>
+                    <!--
+                    No código abaixo a quantidade de colunas representados pelo simbolo *
+                    é refente a quantidade de colunas que existem na tabela produto
+                    -->
+                    <Grid ColumnDefinitions="*, *, *, *, *, *">
+                        <Label Grid.Column="0" Text="ID" />
+                        <Label Grid.Column="1" Text="Descrição" />
+                        <Label Grid.Column="2" Text="Preço" />
+                        <Label Grid.Column="3" Text="Quantidade" />
+                        <Label Grid.Column="4" Text="Total" />
+                    </Grid>
+                </ListView.Header>
+                
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <!-- O ViewCell se refere ao menu que é aberto ao clicar com o botão direito do mouse em cima de um item. -->
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Remover" Clicked="MenuItem_Clicked"/>
+                            </ViewCell.ContextActions>
+
+                            <Grid ColumnDefinitions="*, *, *, *, *, *">
+                                <Label Grid.Column="0" Text="{Binding id }" />
+                                <Label Grid.Column="1" Text="{Binding Descricao}" />
+                                <Label Grid.Column="2" Text="{Binding Preco}" />
+                                <Label Grid.Column="3" Text="{Binding Quantidade}" />
+                                <Label Grid.Column="4" Text="{Binding Total}" />
+                            </Grid>
+
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                
+            </ListView>
+        </VerticalStackLayout>
 
     </VerticalStackLayout>
 </ContentPage>
