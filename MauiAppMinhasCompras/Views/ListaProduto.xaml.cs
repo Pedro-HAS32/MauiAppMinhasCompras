@@ -1,114 +1,114 @@
 using MauiAppMinhasCompras.Models;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace MauiAppMinhasCompras.Views;
 
 public partial class ListaProduto : ContentPage
 {
-    private ObservableCollection<Produto> lista = new ObservableCollection<Produto>();
-    private CancellationTokenSource _cancellationTokenSource;
+    ObservableCollection<Produto> lista = new ObservableCollection<Produto>();
 
     public ListaProduto()
     {
         InitializeComponent();
-        lst_produtos.ItemsSource = lista; // lst_produtos é o x:name da linha 28 do XAML.
+
+        lst_produtos.ItemsSource = lista;
     }
 
     protected async override void OnAppearing()
     {
-        await CarregarProdutos();
-    }
-
-    // Método para carregar produtos (com ou sem busca)
-    private async Task CarregarProdutos(string searchText = null)
-    {
-        lista.Clear(); // Limpa a lista antes de carregar novos dados
-
-        List<Produto> tmp;
-        if (string.IsNullOrWhiteSpace(searchText))
-        {
-            // Carrega todos os produtos se não houver texto de busca
-            tmp = await App.Db.GetAll();
-        }
-        else
-        {
-            // Realiza a busca com o texto fornecido
-            tmp = await App.Db.Search(searchText);
-        }
-
-        // Adiciona os produtos à lista
-        foreach (var item in tmp)
-        {
-            lista.Add(item);
-        }
-    }
-
-    // Evento de busca dinâmica
-    private async void txt_search_TextChanged(object sender, TextChangedEventArgs e)
-    {
         try
         {
-            // Cancela a operação anterior, se houver
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
+            lista.Clear();
 
-            // Adiciona um atraso (debounce) de 300ms antes de executar a busca
-            await Task.Delay(300, _cancellationTokenSource.Token);
+            List<Produto> tmp = await App.Db.GetAll();
 
-            string q = e.NewTextValue;
-
-            // Atualiza a lista com os resultados da busca
-            await CarregarProdutos(q);
-        }
-        catch (TaskCanceledException)
-        {
-            // Ignora a exceção se a tarefa foi cancelada (debounce)
+            tmp.ForEach(i => lista.Add(i));
         }
         catch (Exception ex)
         {
-            // Trata outros erros (ex: falha na conexão com o banco de dados)
-            await DisplayAlert("Erro", "Ocorreu um erro durante a busca: " + ex.Message, "OK");
+            await DisplayAlert("Ops", ex.Message, "OK");
         }
     }
 
-    // Evento do botão "Adicionar Produto"
     private void ToolbarItem_Clicked(object sender, EventArgs e)
     {
         try
         {
             Navigation.PushAsync(new Views.NovoProduto());
+
         }
         catch (Exception ex)
         {
-            DisplayAlert("Ops, algo deu errado!", ex.Message, "OK");
+            DisplayAlert("Ops", ex.Message, "OK");
         }
     }
 
-    // Evento do botão "Somar"
+    private async void txt_search_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            string q = e.NewTextValue;
+
+            lista.Clear();
+
+            List<Produto> tmp = await App.Db.Search(q);
+
+            tmp.ForEach(i => lista.Add(i));
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "OK");
+        }
+    }
+
     private void ToolbarItem_Clicked_1(object sender, EventArgs e)
     {
         double soma = lista.Sum(i => i.Total);
+
         string msg = $"O total é {soma:C}";
-        DisplayAlert("Total dos produtos", msg, "OK");
+
+        DisplayAlert("Total dos Produtos", msg, "OK");
     }
 
-    // Evento do menu de contexto (remover produto)
     private async void MenuItem_Clicked(object sender, EventArgs e)
     {
-        // Obtém o produto selecionado
-        var menuItem = sender as MenuItem;
-        var produto = menuItem?.BindingContext as Produto; // Usa BindingContext para obter o item
-
-        if (produto != null)
+        try
         {
-            // Remove o produto da lista e do banco de dados
-            bool confirmacao = await DisplayAlert("Remover", $"Deseja remover {produto.Descricao}?", "Sim", "Não");
-            if (confirmacao)
+            MenuItem selecinado = sender as MenuItem;
+
+            Produto p = selecinado.BindingContext as Produto;
+
+            bool confirm = await DisplayAlert(
+                "Tem Certeza?", $"Remover {p.Descricao}?", "Sim", "Não");
+
+            if (confirm)
             {
-                await App.Db.Delete(produto.id);
-                lista.Remove(produto);
+                await App.Db.Delete(p.Id);
+                lista.Remove(p);
             }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "OK");
+        }
+    }
+
+    private void lst_produtos_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+
+        //Muda para a página EditarProduto
+        try
+        {
+            Produto p = e.SelectedItem as Produto;
+
+            Navigation.PushAsync(new Views.EditarProduto
+            {
+                BindingContext = p,
+            });
+        }
+        catch (Exception ex)
+        {
+            DisplayAlert("Ops", ex.Message, "OK");
         }
     }
 }

@@ -22,7 +22,5 @@
         <Entry x:Name="txt_Preco"
                Keyboard="Numeric"
                Placeholder="Preço do Produto" />
-
-
     </VerticalStackLayout>
 </ContentPage>
