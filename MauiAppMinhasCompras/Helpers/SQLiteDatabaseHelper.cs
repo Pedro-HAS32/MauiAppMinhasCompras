@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using MauiAppMinhasCompras.Models;
+﻿using MauiAppMinhasCompras.Models;
 using SQLite;
 
 namespace MauiAppMinhasCompras.Helpers
@@ -27,7 +21,7 @@ namespace MauiAppMinhasCompras.Helpers
 
         public Task<List<Produto>> Update(Produto p)
         {
-            string sql = "UPDATE Produto SET Descricao=?, Quantidade?, Preco=? WHERE id=?";
+            string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=? WHERE id=?";
             return _conn.QueryAsync<Produto>(
                 sql, p.Descricao, p.Quantidade, p.Preco, p.Id
                 );
