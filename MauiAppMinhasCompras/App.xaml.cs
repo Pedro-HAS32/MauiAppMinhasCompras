@@ -1,4 +1,5 @@
 ﻿using MauiAppMinhasCompras.Helpers;
+using System.Globalization;
 
 namespace MauiAppMinhasCompras
 {
@@ -12,7 +13,7 @@ namespace MauiAppMinhasCompras
             {
                 if(_db == null) 
                 {
-                    string path = Path.Combine(
+                    string path = Path.Combine( 
                         Environment.GetFolderPath(
                             Environment.SpecialFolder.LocalApplicationData),
                         "banco_sqlite_compras.db3");
@@ -28,7 +29,8 @@ namespace MauiAppMinhasCompras
         {
             InitializeComponent();
 
-            
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR"); //Altera o valor do sifrão para R$
+
             MainPage = new NavigationPage (new Views.ListaProduto());
         }
     }

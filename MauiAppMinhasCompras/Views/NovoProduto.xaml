@@ -22,5 +22,9 @@
         <Entry x:Name="txt_Preco"
                Keyboard="Numeric"
                Placeholder="Preço do Produto" />
+
+        <Label Text="Categoria" />
+        <Entry x:Name="txt_Categoria"
+               Placeholder="Insira a categoria do produto" />
     </VerticalStackLayout>
 </ContentPage>

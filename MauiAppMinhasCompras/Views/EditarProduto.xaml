@@ -25,6 +25,11 @@
                    Keyboard="Numeric"
                    Placeholder="Preço do Produto" />
 
+            <Label Text="Categoria:" />
+            <Entry x:Name="txt_Categoria"
+                   Text="{Binding Categoria}"
+                   Placeholder="Categoria do Produto" />
+
 
     </VerticalStackLayout>
 </ContentPage>

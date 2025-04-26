@@ -18,9 +18,9 @@ public partial class NovoProduto : ContentPage
 			{
 				
 				Descricao = txt_Descricao.Text,
-				
 				Quantidade = Convert.ToDouble(txt_Quantidade.Text),
-				Preco = Convert.ToDouble(txt_Preco.Text)
+				Preco = Convert.ToDouble(txt_Preco.Text),
+				Categoria = txt_Categoria.Text
 			};
 
 			await App.Db.Insert(p);
