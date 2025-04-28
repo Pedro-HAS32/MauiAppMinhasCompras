@@ -14,11 +14,6 @@
                    Placeholder="Busca de Produtos"
                    TextChanged="txt_search_TextChanged" />
 
-        <Picker x:Name="pck_categoria"
-                Title="Filtrar Categoria"
-                HorizontalOptions="Start"
-                />
-
         <ListView x:Name="lst_produtos" ItemSelected="lst_produtos_ItemSelected">
             <ListView.Header>
                 <Grid ColumnDefinitions="0.5*, 2*, 1*, 0.5*, 1*, 1*">
